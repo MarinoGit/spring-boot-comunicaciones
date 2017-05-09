@@ -48,7 +48,7 @@ public class CommControllerTest {
 
     @Theory
     public void send(@FromDataPoints("mensajes") final String mensaje, @FromDataPoints("tipos") final String tipo, @FromDataPoints("destinos") final String destino) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/send/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
+        mvc.perform(MockMvcRequestBuilders.post("/tinsa/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
                 .param("mensaje", mensaje).param("destino", destino))
                 .andExpect(status().isOk())
                 .andExpect(content().json());
@@ -56,7 +56,7 @@ public class CommControllerTest {
 
     @Theory
     public void checkMensajes(@FromDataPoints("mensajesErroneos") final String mensajeErroneo, @FromDataPoints("tipos") final String tipo, @FromDataPoints("destinos") final String destino) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/send/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
+        mvc.perform(MockMvcRequestBuilders.post("/tinsa/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
                 .param("mensaje", mensajeErroneo).param("destino", destino))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string(equalTo("El mensaje es erróneo. No se ha podido enviar!")));
