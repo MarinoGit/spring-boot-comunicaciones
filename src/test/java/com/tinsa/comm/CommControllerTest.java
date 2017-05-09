@@ -1,5 +1,6 @@
 package com.tinsa.comm;
 
+import com.tinsa.model.CreateMessageResponse;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.FromDataPoints;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -41,16 +43,15 @@ public class CommControllerTest {
     @DataPoint("destinos")
     public static String[] destinos = new String[]{"9100000202", "666778899"};
 
-    @Test
-    public void setupTest() {
-    }
+    private CreateMessageResponse respuestaCorrecta = Jackson2ObjectMapperBuilder.jjson("'id':100000,'resultado':'Ok'");
+
 
     @Theory
     public void send(@FromDataPoints("mensajes") final String mensaje, @FromDataPoints("tipos") final String tipo, @FromDataPoints("destinos") final String destino) throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/send/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
                 .param("mensaje", mensaje).param("destino", destino))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Send Ok!")));
+                .andExpect(content().json());
     }
 
     @Theory
