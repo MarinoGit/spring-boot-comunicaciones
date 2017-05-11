@@ -3,12 +3,10 @@ package com.tinsa.resources;
 import com.tinsa.dao.MessageRepository;
 import com.tinsa.model.CreateMessageRequest;
 import com.tinsa.model.CreateMessageResponse;
+import com.tinsa.model.GetMessageResponse;
 import com.tinsa.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Servicio para enviar mensajes
@@ -51,5 +49,27 @@ public class CommController extends Controller {
         Response<?> resultado;
         resultado = new Response<>(createMessageResponse);
         return resultado;
+    }
+
+    @RequestMapping(value = "/send", method = RequestMethod.GET, consumes = "application/json",
+            produces = "application/json")
+    public Response<?> get(@PathVariable final Long id) {
+        GetMessageResponse getMessageResponse = new GetMessageResponse();
+        Message message = messageRepository.findOne(id);
+        if (message != null) {
+            getMessageResponse.setId(message.getId());
+            getMessageResponse.setMensaje(message.getMensaje());
+            getMessageResponse.setDestinatario(message.getDestinatario());
+            getMessageResponse.setTipo(message.getTipo());
+            getMessageResponse.setCreationTimestamp(message.getCreationTimestamp());
+            getMessageResponse.setEstado(message.getEstado());
+            getMessageResponse.setMotivoError(message.getMotivoError());
+            getMessageResponse.setReintentos(message.getReintentos());
+            getMessageResponse.setReintentosPendientes(message.getReintentosPendientes());
+        }
+        Response<?> resultado;
+        resultado = new Response<>(getMessageResponse);
+        return resultado;
+
     }
 }
