@@ -26,7 +26,7 @@ public class CommController extends Controller {
     @Autowired
     MessageRepository messageRepository;
 
-    @RequestMapping(value = "/tinsa", method = RequestMethod.POST, consumes = "application/json",
+    @RequestMapping(value = "/send", method = RequestMethod.POST, consumes = "application/json",
             produces = "application/json")
     public Response<?> send(@RequestBody final CreateMessageRequest request) {
         CreateMessageResponse createMessageResponse;

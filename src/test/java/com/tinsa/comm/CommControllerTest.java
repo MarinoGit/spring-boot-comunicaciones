@@ -39,7 +39,7 @@ public class CommControllerTest {
         String mensaje = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat";
         String destino = "666778899";
         CreateMessageRequest peticionCorrecta = new CreateMessageRequest(tipo, mensaje, destino);
-        mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionCorrecta)))
+        mvc.perform(MockMvcRequestBuilders.post("/send/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionCorrecta)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
@@ -52,7 +52,7 @@ public class CommControllerTest {
         String mensaje = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat";
         String destino = "666778899";
         CreateMessageRequest peticionCorrecta = new CreateMessageRequest(tipo, mensaje, destino);
-        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionCorrecta)))
+        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/send/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionCorrecta)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
@@ -60,7 +60,7 @@ public class CommControllerTest {
 
         Long idGenerado = gson.fromJson(result.getResponse().getContentAsString(), CreateMessageResponse.class).getId();
 
-        mvc.perform(MockMvcRequestBuilders.get("/tinsa/").requestAttr("id", idGenerado))
+        mvc.perform(MockMvcRequestBuilders.get("/send/").requestAttr("id", idGenerado))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
@@ -82,7 +82,7 @@ public class CommControllerTest {
         String mensajeErroneo = "Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.";
         String destino = "666778899";
         CreateMessageRequest peticionErroneaMessage = new CreateMessageRequest(tipo, mensajeErroneo, destino);
-        mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(MockMvcRequestBuilders.post("/send/").contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(peticionErroneaMessage)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isEmpty())
@@ -95,7 +95,7 @@ public class CommControllerTest {
         String mensaje = "Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.";
         String destino = "666778899";
         CreateMessageRequest peticionErroneaTipo = new CreateMessageRequest(tipoSinTerminar, mensaje, destino);
-        mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionErroneaTipo)))
+        mvc.perform(MockMvcRequestBuilders.post("/send/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionErroneaTipo)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("No se puede enviar el mensaje por un medio desconocido!"));
