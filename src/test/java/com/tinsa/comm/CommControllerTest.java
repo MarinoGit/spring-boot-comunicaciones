@@ -3,6 +3,7 @@ package com.tinsa.comm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tinsa.model.CreateMessageRequest;
+import com.tinsa.model.CreateMessageResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -30,7 +32,6 @@ public class CommControllerTest {
     private MockMvc mvc;
 
     Gson gson = new Gson();
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void send() throws Exception {
@@ -43,6 +44,36 @@ public class CommControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("Ok"));
+    }
+
+    @Test
+    public void viewMessage() throws Exception {
+        String tipo = "sms";
+        String mensaje = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat";
+        String destino = "666778899";
+        CreateMessageRequest peticionCorrecta = new CreateMessageRequest(tipo, mensaje, destino);
+        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionCorrecta)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("Ok")).andReturn();
+
+        Long idGenerado = gson.fromJson(result.getResponse().getContentAsString(), CreateMessageResponse.class).getId();
+
+        mvc.perform(MockMvcRequestBuilders.get("/tinsa/").requestAttr("id", idGenerado))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.tipo")).value(tipo))
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.mensaje")).value(mensaje))
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.destinatario")).value(destino))
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.reintentos")).isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.reintentosPendientes")).isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.estado")).isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.creationTimestamp")).isString())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("Ok"))
+                .andReturn();
+
     }
 
     @Test

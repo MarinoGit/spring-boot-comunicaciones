@@ -31,7 +31,7 @@ public class CommController extends Controller {
     public Response<?> send(@RequestBody final CreateMessageRequest request) {
         CreateMessageResponse createMessageResponse;
 
-        if (!request.getTipo().equalsIgnoreCase(SMS) || !request.getTipo().equalsIgnoreCase(FAX)) {
+        if (!request.getTipo().equalsIgnoreCase(SMS) && !request.getTipo().equalsIgnoreCase(FAX)) {
             createMessageResponse = new CreateMessageResponse(null, "No se puede enviar el mensaje por un medio desconocido!");
         } else if (request.getTipo().equalsIgnoreCase(SMS) && request.getMensaje().length() > SMS_MESSAGE_MAX_SIZE) {
             createMessageResponse = new CreateMessageResponse(null, "El mensaje es demasiado largo. No se ha podido enviar!");
