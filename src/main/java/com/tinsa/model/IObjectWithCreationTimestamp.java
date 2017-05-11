@@ -1,13 +1,15 @@
 package com.tinsa.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Interface para añadir creationTimestamp a cualquier modelo
  *
- * Created by marinovilchez on 9/5/17.
+ * @author marinovilchez
+ * @fecha 9/5/17
  */
 public interface IObjectWithCreationTimestamp {
-    void setCreationTimestamp(final LocalDateTime creationTimestamp);
-    LocalDateTime getCreationTimestamp();
+    void setCreationTimestamp(final Date creationTimestamp);
+
+    Date getCreationTimestamp();
 }

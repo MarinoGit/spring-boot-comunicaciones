@@ -5,10 +5,10 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 /**
- * Created by
+ * utilidades
  *
  * @author marinovilchez
- * @since 9/5/17
+ * @fecha 9/5/17
  */
 public class Util {
 
@@ -19,7 +19,7 @@ public class Util {
         try {
             spanishNumberProto = phoneUtil.parse(telefono, "ES");
         } catch (NumberParseException e) {
-            System.out.println("NumberParseException was thrown:  " + e.toString());
+            System.out.println("NumberParseException was thrown:  " + e);
         }
         return (spanishNumberProto != null) && phoneUtil.isValidNumber(spanishNumberProto);
     }

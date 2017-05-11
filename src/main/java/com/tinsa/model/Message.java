@@ -1,17 +1,22 @@
 package com.tinsa.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Esta clase representa un mensaje almacenado de la base de datos
  *
- * Created by marinovilchez on 9/5/17.
+ * @author marinovilchez
+ * @fecha 9/5/17
  */
 @Entity
 public class Message implements IObjectWithCreationTimestamp {
-    @Id private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private String tipo;
     private String mensaje;
     private String destinatario;
@@ -19,13 +24,13 @@ public class Message implements IObjectWithCreationTimestamp {
     private int reintentosPendientes;
     private String estado;
     private String motivoError;
-    private LocalDateTime creationTimestamp;
+    private Date creationTimestamp;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,13 +89,14 @@ public class Message implements IObjectWithCreationTimestamp {
     public void setMotivoError(String motivoError) {
         this.motivoError = motivoError;
     }
+
     @Override
-    public void setCreationTimestamp(LocalDateTime creationTimestamp) {
+    public void setCreationTimestamp(Date creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 
     @Override
-    public LocalDateTime getCreationTimestamp() {
+    public Date getCreationTimestamp() {
         return this.creationTimestamp;
     }
 }

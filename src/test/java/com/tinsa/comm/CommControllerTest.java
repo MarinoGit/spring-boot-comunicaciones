@@ -1,28 +1,26 @@
 package com.tinsa.comm;
 
-import com.tinsa.model.CreateMessageResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.tinsa.model.CreateMessageRequest;
 import org.junit.Test;
-import org.junit.experimental.theories.DataPoint;
-import org.junit.experimental.theories.FromDataPoints;
-import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Pruebas integradas de modulo de comunicaciones por SMS y fax
- * <p>
- * Created by marinovilchez on 8/5/17.
+ *
+ * @author marinovilchez
+ * @fecha 8/5/17
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,42 +29,44 @@ public class CommControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @DataPoint("tipo")
-    public static String[] tipos = new String[]{"sms", "fax"};
-    @DataPoint("tiposSinTerminar")
-    public static String[] tiposSinTerminar = new String[]{"push", "whacha"};
-    @DataPoint("mensajes")
-    public static String[] mensajes = new String[]{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat", "Suspendisse mattis nisl purus, ornare dictum nulla suscipit et. Duis eu lacus orci. In a diam quis tellus vehicula auctor. Suspendisse vehicula finibus consectetur."};
-    @DataPoint("mensajesErroneos")
-    public static String[] mensajesErroneos = new String[]{
-            "Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres."};
-    @DataPoint("destinos")
-    public static String[] destinos = new String[]{"9100000202", "666778899"};
+    Gson gson = new Gson();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-    private CreateMessageResponse respuestaCorrecta = Jackson2ObjectMapperBuilder.jjson("'id':100000,'resultado':'Ok'");
-
-
-    @Theory
-    public void send(@FromDataPoints("mensajes") final String mensaje, @FromDataPoints("tipos") final String tipo, @FromDataPoints("destinos") final String destino) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/tinsa/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
-                .param("mensaje", mensaje).param("destino", destino))
+    @Test
+    public void send() throws Exception {
+        String tipo = "sms";
+        String mensaje = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat";
+        String destino = "666778899";
+        CreateMessageRequest peticionCorrecta = new CreateMessageRequest(tipo, mensaje, destino);
+        mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionCorrecta)))
                 .andExpect(status().isOk())
-                .andExpect(content().json());
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("Ok"));
     }
 
-    @Theory
-    public void checkMensajes(@FromDataPoints("mensajesErroneos") final String mensajeErroneo, @FromDataPoints("tipos") final String tipo, @FromDataPoints("destinos") final String destino) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/tinsa/" + tipo + "/").accept(MediaType.APPLICATION_JSON)
-                .param("mensaje", mensajeErroneo).param("destino", destino))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string(equalTo("El mensaje es erróneo. No se ha podido enviar!")));
+    @Test
+    public void checkMensajes() throws Exception {
+        String tipo = "sms";
+        String mensajeErroneo = "Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.";
+        String destino = "666778899";
+        CreateMessageRequest peticionErroneaMessage = new CreateMessageRequest(tipo, mensajeErroneo, destino);
+        mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(peticionErroneaMessage)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("El mensaje es demasiado largo. No se ha podido enviar!"));
     }
 
-    @Theory
-    public void checkTipos(@FromDataPoints("mensajes") final String mensaje, @FromDataPoints("tiposSinTerminar") final String tipoSinTerminar, @FromDataPoints("destinos") final String destino) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/send/" + tipoSinTerminar + "/").accept(MediaType.APPLICATION_JSON)
-                .param("mensaje", mensaje).param("destino", destino))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(equalTo("No encontrado!")));
+    @Test
+    public void checkTipos() throws Exception {
+        String tipoSinTerminar = "push";
+        String mensaje = "Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.Este mensaje es superior a 160 caracteres.";
+        String destino = "666778899";
+        CreateMessageRequest peticionErroneaTipo = new CreateMessageRequest(tipoSinTerminar, mensaje, destino);
+        mvc.perform(MockMvcRequestBuilders.post("/tinsa/").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(peticionErroneaTipo)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.id")).isEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("No se puede enviar el mensaje por un medio desconocido!"));
     }
 }

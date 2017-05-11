@@ -50,11 +50,10 @@
             <artifactId>libphonenumber</artifactId>
             <version>8.4.2</version>
         </dependency>
-
         <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-            <version>1.0-groovy-2.4</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
             <scope>test</scope>
         </dependency>
 

@@ -3,11 +3,26 @@ package com.tinsa.model;
 /**
  * Esta clase representa la respuesta a la creación de un mensaje
  *
- * Created by marinovilchez on 9/5/17.
+ * @author marinovilchez
+ * @fecha 9/5/17
  */
 public class CreateMessageResponse {
     private Long id;
     private String resultado;
+
+
+    //Para que jackson no falle
+    public CreateMessageResponse() {
+    }
+    /**
+     * Solo para tests
+     * @param id
+     * @param resultado
+     */
+    public CreateMessageResponse(final Long id, final String resultado) {
+        this.id = id;
+        this.resultado = resultado;
+    }
 
     public Long getId() {
         return id;
