@@ -1,4 +1,4 @@
-package com.tinsa.error;
+package com.marino.error;
 
 /**
  * Enum con los posibles errores.

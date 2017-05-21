@@ -1,6 +1,6 @@
-package com.tinsa.dao;
+package com.marino.dao;
 
-import com.tinsa.model.Message;
+import com.marino.model.Message;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;

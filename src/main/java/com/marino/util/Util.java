@@ -1,4 +1,4 @@
-package com.tinsa.util;
+package com.marino.util;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;

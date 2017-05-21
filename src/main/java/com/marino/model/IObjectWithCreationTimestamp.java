@@ -1,4 +1,4 @@
-package com.tinsa.model;
+package com.marino.model;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.tinsa.model;
+package com.marino.model;
 
 /**
  * Esta clase representa la respuesta a la creación de un mensaje

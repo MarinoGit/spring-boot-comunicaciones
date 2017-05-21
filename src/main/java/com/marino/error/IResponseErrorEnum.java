@@ -1,4 +1,4 @@
-package com.tinsa.error;
+package com.marino.error;
 
 /**
  * Interfaz que deben implementar los enums de error de respuesta.

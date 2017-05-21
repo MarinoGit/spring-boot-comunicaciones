@@ -1,4 +1,4 @@
-package com.tinsa.error;
+package com.marino.error;
 
 /**
  * Textos de los correspondientes códigos de error.

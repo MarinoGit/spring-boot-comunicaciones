@@ -1,9 +1,8 @@
-package com.tinsa.comm;
+package com.marino.comm;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.tinsa.model.CreateMessageRequest;
-import com.tinsa.model.CreateMessageResponse;
+import com.marino.model.CreateMessageRequest;
+import com.marino.model.CreateMessageResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

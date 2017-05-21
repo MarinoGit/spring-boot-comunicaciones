@@ -1,4 +1,4 @@
-package com.tinsa;
+package com.marino;
 
 import java.util.Arrays;
 
@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class PruebatecnicaApplication {
+public class ComunicacionesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PruebatecnicaApplication.class, args);
+		SpringApplication.run(ComunicacionesApplication.class, args);
 	}
 
 	@Bean

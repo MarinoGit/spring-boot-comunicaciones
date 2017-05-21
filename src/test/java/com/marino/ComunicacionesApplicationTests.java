@@ -1,4 +1,4 @@
-package com.tinsa;
+package com.marino;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PruebatecnicaApplicationTests {
+public class ComunicacionesApplicationTests {
 
 	@Test
 	public void contextLoads() {

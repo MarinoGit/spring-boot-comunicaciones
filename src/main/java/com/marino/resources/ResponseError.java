@@ -1,7 +1,7 @@
-package com.tinsa.resources;
+package com.marino.resources;
 
 
-import com.tinsa.error.IResponseErrorEnum;
+import com.marino.error.IResponseErrorEnum;
 
 /**
  * Representa un mensaje de error para las respuetas de los servicios REST, ya que los códigos de error estándar de HTTP

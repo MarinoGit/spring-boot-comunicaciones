@@ -1,4 +1,4 @@
-package com.tinsa.resources;
+package com.marino.resources;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

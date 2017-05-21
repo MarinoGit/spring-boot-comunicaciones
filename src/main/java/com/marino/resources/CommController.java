@@ -1,10 +1,10 @@
-package com.tinsa.resources;
+package com.marino.resources;
 
-import com.tinsa.dao.MessageRepository;
-import com.tinsa.model.CreateMessageRequest;
-import com.tinsa.model.CreateMessageResponse;
-import com.tinsa.model.GetMessageResponse;
-import com.tinsa.model.Message;
+import com.marino.dao.MessageRepository;
+import com.marino.model.CreateMessageRequest;
+import com.marino.model.CreateMessageResponse;
+import com.marino.model.GetMessageResponse;
+import com.marino.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

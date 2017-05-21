@@ -1,4 +1,4 @@
-package com.tinsa.util;
+package com.marino.util;
 
 import org.junit.Assert;
 import org.junit.experimental.theories.DataPoints;
