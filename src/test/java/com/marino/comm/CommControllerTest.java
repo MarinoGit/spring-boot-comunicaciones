@@ -45,7 +45,7 @@ public class CommControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath(("$.data.resultado")).value("Ok"));
     }
 
-    @Test
+    //@Test
     public void viewMessage() throws Exception {
         String tipo = "sms";
         String mensaje = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec urna molestie, lacinia massa a, gravida lectus. In lacinia mi vel tincidunt volutpat";
